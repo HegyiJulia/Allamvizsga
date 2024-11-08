@@ -9,6 +9,7 @@ if es.ping():
     print("Kapcsolódás sikeres!")
 else:
     print("Kapcsolódás sikertelen!")
+    exit
 
 # Index neve
 index_name = "senatus_határozatok"
