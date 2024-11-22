@@ -1,0 +1,24 @@
+# Python általános fájlok
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtuális környezet
+.venv/
+
+# Környezeti változók fájlja
+.env
+
+# Letöltött fájlok 
+#downloaded_files/
+
+# Log fájlok
+*.log
+
+# IDE/Editor-specifikus fájlok
+.vscode/
+.idea/
+
+# Operációs rendszer-specifikus fájlok
+.DS_Store
+Thumbs.db
