@@ -1,0 +1,2 @@
+elasticsearch==8.15.3
+PyMuPDF==1.21.1  # A 'fitz' néven importálható PyMuPDF csomag
