@@ -9,27 +9,6 @@ def get_elasticsearch_client():
         raise ValueError("Elasticsearch nem elérhető!")
     return es
 
-# Az index létrehozása, ha nem létezik
-def create_index_if_not_exists():
-    index_name = "senatus_resolutions"
-    es = get_elasticsearch_client()
-    if not es.indices.exists(index=index_name):
-        # Az index létrehozása, ha nem létezik
-        es.indices.create(index=index_name)
-        #print(f"Index '{index_name}' sikeresen létrehozva.")
-    #else:
-        #print(f"Index '{index_name}' már létezik.")
-
-# Indexelés PDF fájlokhoz
-def index_pdf(file_path, content):
-    # Ellenőrizzük, hogy létezik-e az index, ha nem, létrehozzuk
-    create_index_if_not_exists()
-
-    filename = os.path.basename(file_path)  # Csak a fájl neve
-    doc_body = {"file_path": file_path, "filename": filename, "content": content}
-    es.index(index="senatus_resolutions", document=doc_body)
-    print(f"Dokumentum indexelve: {filename}")
-
 # Keresési függvény
 def search_documents(query: str):
     # Csatlakozás az Elasticsearch-hez
