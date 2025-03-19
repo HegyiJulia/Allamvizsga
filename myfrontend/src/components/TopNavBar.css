@@ -1,0 +1,15 @@
+.navigation-bar{
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    top: 0; 
+    margin-bottom: auto;
+}
+
+.links-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-left: 32px;
+    gap: 32px;
+}

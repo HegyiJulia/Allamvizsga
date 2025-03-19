@@ -1,0 +1,102 @@
+/* General search container */
+.search-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  /* Styling for the search input */
+  .search-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  /* Styling for the search button */
+  .search-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Hover effect on the search button */
+  .search-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Results container: Makes it scrollable while keeping the input section static */
+  .results-container {
+    max-height: 400px; /* Set the max height for the results list */
+    overflow-y: auto;  /* Enable vertical scrolling if results exceed the max-height */
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Custom Scrollbar Styling */
+  .results-container::-webkit-scrollbar {
+    width: 8px; /* Set the width of the scrollbar */
+  }
+  
+  .results-container::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Light background for the track */
+    border-radius: 10px; /* Rounded corners for the track */
+  }
+  
+  .results-container::-webkit-scrollbar-thumb {
+    background-color: #007bff; /* Blue color for the thumb */
+    border-radius: 10px; /* Rounded corners for the thumb */
+    border: 3px solid #f1f1f1; /* Optional border to create contrast with the track */
+  }
+  
+  .results-container::-webkit-scrollbar-thumb:hover {
+    background-color: #0056b3; /* Darker blue when hovering over the thumb */
+  }
+  
+  /* Style for each result card */
+  .results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    padding: 0 20px;
+  }
+  
+  /* Card styling */
+  .card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+    margin: 0 auto;
+  }
+  
+  /* Hover effect on each result card */
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  
+  /* Style for the content inside the card */
+  .card p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+  }
+  
