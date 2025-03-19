@@ -9,25 +9,45 @@ def get_elasticsearch_client():
         raise ValueError("Elasticsearch nem elérhető!")
     return es
 
+
+
 # Keresési függvény
 def search_documents(query: str):
-    # Csatlakozás az Elasticsearch-hez
     es = get_elasticsearch_client()
 
-    # Lekérdezés összeállítása
     response = es.search(
-        index="senatus_resolutions",  # Használni kell az index nevét
+        index="senatus_resolutions",
         body={
             "query": {
                 "match": {
                     "content": query
                 }
             },
-            "_source": ["filename"]  # Csak a filename mezőt kérjük vissza
+            "highlight": {
+                "fields": {
+                    "content": {
+                        "fragment_size": 150,  # A visszaadott szövegrész hossza
+                        "number_of_fragments": 1  # Csak az első találatot adja vissza
+                    }
+                }
+            },
+            "_source": ["filename", "content"]
         }
     )
 
-    # A válaszban lévő találatok kigyűjtése
-    filenames = [hit["_source"]["filename"] for hit in response["hits"]["hits"]]
+    results = []
+    for hit in response["hits"]["hits"]:
+        filename = hit["_source"]["filename"]
+        content = hit["_source"]["content"]
 
-    return filenames
+        # Ha van highlight, akkor azt használjuk, ha nincs, akkor az első 150 karaktert
+        snippet = hit.get("highlight", {}).get("content", [content[:150]])[0]
+
+        results.append({
+            "filename": filename,
+            "snippet": snippet,
+            "content": content
+        })
+
+    return results
+

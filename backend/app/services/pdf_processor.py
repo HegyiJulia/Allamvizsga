@@ -56,5 +56,5 @@ def process_and_index_pdfs(pdf_directory: str):
                 print(f"Hiba történt a PDF feldolgozása során: {filename}, Hiba: {e}")
     
     print("Minden PDF dokumentum sikeresen feldolgozva és indexelve!")
-create_index_if_not_exists()
-process_and_index_pdfs("downloaded_files/pdf_files")
+
+

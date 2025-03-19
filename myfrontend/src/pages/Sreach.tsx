@@ -1,40 +1,50 @@
 import React, { useState } from "react";
-import { searchByWord } from "../api/search";
-import './Search.css'; // Import the new CSS for styling the cards and scrollable list
+import { searchByWord, SearchResult } from "../api/search";
+import './Search.css';
 
 const Search = () => {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedFileContent, setSelectedFileContent] = useState<string | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // To keep track of the selected item index
 
   const handleSearch = async () => {
     setLoading(true);
     setError(null);
+    setSelectedFileContent(null); // Reset content when new search starts
+    setSelectedIndex(null); // Reset the selected index as well
     try {
       const data = await searchByWord(query);
-      setResults(data.results);
+      setResults(data);
     } catch (err) {
       console.error(err);
+      setError("Hiba történt a keresés során.");
     }
     setLoading(false);
   };
 
+  const showFullContent = (content: string, index: number) => {
+    setSelectedFileContent(content);
+    setSelectedIndex(index); // Save the index of the selected item
+  };
+
   return (
     <div className="search-container">
-      <h2>Search Test</h2>
+      <h2>Dokumentum kereső</h2>
       <input
         type="text"
-        placeholder="Enter a word..."
+        placeholder="Írjon be egy keresett szót..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="search-input"
       />
       <button onClick={handleSearch} className="search-button">
-        Search
+        Keresés
       </button>
 
-      {loading && <p>Loading...</p>}
+      {loading && <p>Betöltés...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       <div className="results-container">
@@ -42,12 +52,30 @@ const Search = () => {
           <div className="results-list">
             {results.map((item, index) => (
               <div key={index} className="card">
-                <p>{item}</p>
+                {selectedIndex === index ? (
+                  <div>
+                    <h3>{item.filename}</h3>
+                    <p>{selectedFileContent}</p>
+                  </div>
+                ) : (
+                    <div>
+                    <h3>{item.filename}</h3>
+                    <p
+                      className="snippet"
+                      dangerouslySetInnerHTML={{
+                        __html: item.snippet.replace(/<em>/g, "<strong>").replace(/<\/em>/g, "</strong>")
+                      }}
+                    />
+                    <button className="open-button" onClick={() => showFullContent(item.content, index)}>
+                      Több
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
           </div>
         ) : (
-          !loading && <p>No results found.</p>
+          !loading && <p>Nincs találat.</p>
         )}
       </div>
     </div>
