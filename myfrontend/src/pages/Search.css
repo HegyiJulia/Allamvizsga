@@ -82,10 +82,14 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    width: 250px;
-    text-align: center;
+    width: 100%;
+    text-align: left;
     transition: transform 0.2s ease-in-out;
     margin: 0 auto;
+  }
+
+  .title{
+    text-align: center;
   }
   
   /* Hover effect on each result card */
@@ -99,4 +103,4 @@
     font-size: 16px;
     color: #333;
   }
-  
+ 

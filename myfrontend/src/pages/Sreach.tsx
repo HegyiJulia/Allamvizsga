@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { searchByWord, SearchResult } from "../api/search";
+import { searchDocuments, SearchResult } from "../api/search";
 import './Search.css';
 
 const Search = () => {
@@ -8,15 +8,16 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedFileContent, setSelectedFileContent] = useState<string | null>(null);
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // To keep track of the selected item index
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null); 
+  const [searchMode, setSearchMode] = useState<"word" | "phrase">("word"); 
 
   const handleSearch = async () => {
     setLoading(true);
     setError(null);
-    setSelectedFileContent(null); // Reset content when new search starts
-    setSelectedIndex(null); // Reset the selected index as well
+    setSelectedFileContent(null); 
+    setSelectedIndex(null); 
     try {
-      const data = await searchByWord(query);
+      const data = await searchDocuments(query, searchMode);
       setResults(data);
     } catch (err) {
       console.error(err);
@@ -27,7 +28,7 @@ const Search = () => {
 
   const showFullContent = (content: string, index: number) => {
     setSelectedFileContent(content);
-    setSelectedIndex(index); // Save the index of the selected item
+    setSelectedIndex(index);
   };
 
   return (
@@ -54,12 +55,16 @@ const Search = () => {
               <div key={index} className="card">
                 {selectedIndex === index ? (
                   <div>
-                    <h3>{item.filename}</h3>
-                    <p>{selectedFileContent}</p>
+                    <h3 className="title">{item.filename}</h3>
+                    <p 
+                      dangerouslySetInnerHTML={{
+                        __html: selectedFileContent ? selectedFileContent.replace(/\n/g, "<br />") : ""
+                      }} 
+                    />
                   </div>
                 ) : (
                     <div>
-                    <h3>{item.filename}</h3>
+                    <h3 className="title">{item.filename}</h3>
                     <p
                       className="snippet"
                       dangerouslySetInnerHTML={{

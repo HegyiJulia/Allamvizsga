@@ -6,9 +6,9 @@ export interface SearchResult {
   content:string;
 }
 
-export const searchByWord = async (word: string): Promise<SearchResult[]> => {
+export const searchDocuments = async (query: string, mode:"word"|"phrase"): Promise<SearchResult[]> => {
   try {
-    const response = await apiClient.post("/search", { query: word });
+    const response = await apiClient.post("/search", { query, mode });
 
     console.log(response.data);
     return response.data.results;

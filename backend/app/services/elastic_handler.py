@@ -12,22 +12,37 @@ def get_elasticsearch_client():
 
 
 # Keresési függvény
-def search_documents(query: str):
+def search_documents(query: str, mode: str):
     es = get_elasticsearch_client()
 
+    # Különböző keresési lekérdezések
+    if mode == "phrase":
+        query_body = {
+            "query": {
+                "match_phrase": {  # Pontos kifejezést keres
+                    "content": query
+                }
+            }
+        }
+    if mode == "word":
+        query_body = {
+            "query": {
+                "match": {  # Szavas keresés
+                    "content": query
+                }
+            }
+        }
+
+    # Elasticsearch keresés
     response = es.search(
         index="senatus_resolutions",
         body={
-            "query": {
-                "match": {
-                    "content": query
-                }
-            },
+            **query_body,
             "highlight": {
                 "fields": {
                     "content": {
-                        "fragment_size": 150,  # A visszaadott szövegrész hossza
-                        "number_of_fragments": 1  # Csak az első találatot adja vissza
+                        "fragment_size": 150,
+                        "number_of_fragments": 1
                     }
                 }
             },
@@ -40,7 +55,7 @@ def search_documents(query: str):
         filename = hit["_source"]["filename"]
         content = hit["_source"]["content"]
 
-        # Ha van highlight, akkor azt használjuk, ha nincs, akkor az első 150 karaktert
+        
         snippet = hit.get("highlight", {}).get("content", [content[:150]])[0]
 
         results.append({

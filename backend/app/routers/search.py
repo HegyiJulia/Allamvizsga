@@ -7,7 +7,9 @@ router = APIRouter()
 @router.post("/")
 def search_endpoint(request: SearchRequest):
     try:
-        results = search_documents(request.query)
+        mode = request.mode if request.mode in ["word", "phrase"] else "word"
+        
+        results = search_documents(request.query, mode)
         return {"results": results}  
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
