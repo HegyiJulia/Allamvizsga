@@ -4,10 +4,13 @@ from app.config import ELASTICSEARCH_URL
 # Csatlakozás az Elasticsearch szerverhez
 def get_elasticsearch_client():
     # Csatlakozás az Elasticsearch szerverhez
-    es = Elasticsearch(["http://localhost:9200"])  # Adja meg a helyi Elasticsearch elérhetőséget
-    if not es.ping():
-        raise ValueError("Elasticsearch nem elérhető!")
-    return es
+    try:
+        es = Elasticsearch(["http://localhost:9200"])
+        if not es.ping():
+            raise ValueError("Elasticsearch nem elérhető!")
+        return es
+    except ConnectionError:
+        raise ValueError("Nem lehet csatlakozni az Elasticsearch-hoz. Ellenőrizd, hogy fut-e!")
 
 
 
@@ -24,7 +27,7 @@ def search_documents(query: str, mode: str):
                 }
             }
         }
-    if mode == "word":
+    elif mode == "word":
         query_body = {
             "query": {
                 "match": {  # Szavas keresés
@@ -32,24 +35,29 @@ def search_documents(query: str, mode: str):
                 }
             }
         }
+    else:
+        raise ValueError("Érvénytelen keresési mód!")  # Hibakezelés
 
     # Elasticsearch keresés
-    response = es.search(
-        index="senatus_resolutions",
-        body={
-            **query_body,
-            "highlight": {
-                "fields": {
-                    "content": {
-                        "fragment_size": 150,
-                        "number_of_fragments": 1
+    try:
+        response = es.search(
+            index="senatus_resolutions",
+            body={
+                **query_body,
+                "highlight": {
+                    "fields": {
+                        "content": {
+                            "fragment_size": 150,
+                            "number_of_fragments": 1
+                        }
                     }
-                }
-            },
-            "_source": ["filename", "content"]
-        }
-    )
-
+                },
+                "_source": ["filename", "content"]
+            }
+        )
+    except Exception as e:
+        raise ValueError(f"Hiba az Elasticsearch keresés során: {e}")
+    
     results = []
     for hit in response["hits"]["hits"]:
         filename = hit["_source"]["filename"]

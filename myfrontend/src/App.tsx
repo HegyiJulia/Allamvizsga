@@ -1,26 +1,29 @@
 import { useState } from 'react'
-import { searchByWord } from "./api/search";
+import { searchDocuments, SearchResult } from "./api/search";
 import TopNavBar from './components/TopNavBar';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from './pages/About';
-import Search from './pages/Sreach';
+import Search from './pages/Search';
 import About from './pages/Home';
 
 function App() {
 
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<SearchResult[]>([]);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [searchMode, setSearchMode] = useState<"word" | "phrase">("word");
 
   const handleSearch = async () => {
     setLoading(true);
-    setError(null);
+    setError(null); 
     try {
-      const data = await searchByWord(query);
-      setResults(data.results);
+      const data = await searchDocuments(query, searchMode);
+      setResults(data);
     } catch (err) {
       console.error(err);
+      
     }
     setLoading(false);
   };

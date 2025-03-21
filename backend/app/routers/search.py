@@ -7,11 +7,15 @@ router = APIRouter()
 @router.post("/")
 def search_endpoint(request: SearchRequest):
     try:
+        if not request.query.strip():
+            raise HTTPException(status_code=400, detail="A keresési lekérdezés nem lehet üres!")
+
         mode = request.mode if request.mode in ["word", "phrase"] else "word"
-        
         results = search_documents(request.query, mode)
+
         return {"results": results}  
+
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
+        raise HTTPException(status_code=500, detail=f"Szerverhiba: {str(e)}")

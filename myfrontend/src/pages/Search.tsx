@@ -34,9 +34,33 @@ const Search = () => {
   return (
     <div className="search-container">
       <h2>Dokumentum kereső</h2>
+      
+      <div className="search-mode-container">
+        <label>
+          <input
+            type="radio"
+            name="searchMode"
+            value="word"
+            checked={searchMode === "word"}
+            onChange={() => setSearchMode("word")}
+          />
+          Szavas keresés
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="searchMode"
+            value="phrase"
+            checked={searchMode === "phrase"}
+            onChange={() => setSearchMode("phrase")}
+          />
+          Kifejezés keresés
+        </label>
+      </div>
+
       <input
         type="text"
-        placeholder="Írjon be egy keresett szót..."
+        placeholder="Írjon be egy keresett szót vagy kifejezést..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="search-input"
@@ -56,19 +80,19 @@ const Search = () => {
                 {selectedIndex === index ? (
                   <div>
                     <h3 className="title">{item.filename}</h3>
-                    <p 
+                    <p
                       dangerouslySetInnerHTML={{
-                        __html: selectedFileContent ? selectedFileContent.replace(/\n/g, "<br />") : ""
-                      }} 
+                        __html: selectedFileContent ? selectedFileContent.replace(/\n/g, "<br />") : "",
+                      }}
                     />
                   </div>
                 ) : (
-                    <div>
+                  <div>
                     <h3 className="title">{item.filename}</h3>
                     <p
                       className="snippet"
                       dangerouslySetInnerHTML={{
-                        __html: item.snippet.replace(/<em>/g, "<strong>").replace(/<\/em>/g, "</strong>")
+                        __html: item.snippet.replace(/<em>/g, "<strong>").replace(/<\/em>/g, "</strong>"),
                       }}
                     />
                     <button className="open-button" onClick={() => showFullContent(item.content, index)}>
@@ -88,3 +112,5 @@ const Search = () => {
 };
 
 export default Search;
+
+
