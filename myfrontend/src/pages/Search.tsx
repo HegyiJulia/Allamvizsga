@@ -10,6 +10,7 @@ const Search = () => {
   const [selectedFileContent, setSelectedFileContent] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null); 
   const [searchMode, setSearchMode] = useState<"word" | "phrase">("word"); 
+  const [darkMode, setDarkMode] = useState(false); 
 
   const handleSearch = async () => {
     setLoading(true);
@@ -31,9 +32,23 @@ const Search = () => {
     setSelectedIndex(index);
   };
 
+  const closeFullContent = () => {
+    setSelectedFileContent(null);
+    setSelectedIndex(null);
+  };
+
+    const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
   return (
-    <div className="search-container">
+    
+    <div className={`search-container ${darkMode ? 'dark-mode' : ''}`}>
       <h2>Dokumentum kereső</h2>
+
+      <button onClick={toggleDarkMode} className="dark-mode-button">
+        {darkMode ? "Világos mód" : "Sötét mód"}
+      </button>
       
       <div className="search-mode-container">
         <label>
@@ -60,7 +75,7 @@ const Search = () => {
 
       <input
         type="text"
-        placeholder="Írjon be egy keresett szót vagy kifejezést..."
+        placeholder="Írja be a keresett szavakat.."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="search-input"
@@ -79,13 +94,16 @@ const Search = () => {
               <div key={index} className="card">
                 {selectedIndex === index ? (
                   <div>
-                    <h3 className="title">{item.filename}</h3>
-                    <p
-                      dangerouslySetInnerHTML={{
-                        __html: selectedFileContent ? selectedFileContent.replace(/\n/g, "<br />") : "",
-                      }}
-                    />
-                  </div>
+                  <h3 className="title">{item.filename}</h3>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: selectedFileContent ? selectedFileContent.replace(/\n/g, "<br />") : "",
+                    }}
+                  />
+                  <button className="open-close-button" onClick={closeFullContent}>
+                    Vissza
+                  </button>
+                </div>
                 ) : (
                   <div>
                     <h3 className="title">{item.filename}</h3>
@@ -95,7 +113,7 @@ const Search = () => {
                         __html: item.snippet.replace(/<em>/g, "<strong>").replace(/<\/em>/g, "</strong>"),
                       }}
                     />
-                    <button className="open-button" onClick={() => showFullContent(item.content, index)}>
+                    <button className="open-close-button" onClick={() => showFullContent(item.content, index)}>
                       Több
                     </button>
                   </div>

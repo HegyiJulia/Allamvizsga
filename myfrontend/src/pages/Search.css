@@ -1,106 +1,145 @@
-/* General search container */
-.search-container {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    text-align: center;
-  }
-  
-  /* Styling for the search input */
-  .search-input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  /* Styling for the search button */
-  .search-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  /* Hover effect on the search button */
-  .search-button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Results container: Makes it scrollable while keeping the input section static */
-  .results-container {
-    max-height: 400px; /* Set the max height for the results list */
-    overflow-y: auto;  /* Enable vertical scrolling if results exceed the max-height */
-    margin-top: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #f9f9f9;
-  }
-  
-  /* Custom Scrollbar Styling */
-  .results-container::-webkit-scrollbar {
-    width: 8px; /* Set the width of the scrollbar */
-  }
-  
-  .results-container::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Light background for the track */
-    border-radius: 10px; /* Rounded corners for the track */
-  }
-  
-  .results-container::-webkit-scrollbar-thumb {
-    background-color: #007bff; /* Blue color for the thumb */
-    border-radius: 10px; /* Rounded corners for the thumb */
-    border: 3px solid #f1f1f1; /* Optional border to create contrast with the track */
-  }
-  
-  .results-container::-webkit-scrollbar-thumb:hover {
-    background-color: #0056b3; /* Darker blue when hovering over the thumb */
-  }
-  
-  /* Style for each result card */
-  .results-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    justify-content: center;
-    padding: 0 20px;
-  }
-  
-  /* Card styling */
-  .card {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    text-align: left;
-    transition: transform 0.2s ease-in-out;
-    margin: 0 auto;
-  }
 
-  .title{
-    text-align: center;
-  }
-  
-  /* Hover effect on each result card */
-  .card:hover {
-    transform: translateY(-5px);
-  }
-  
-  /* Style for the content inside the card */
-  .card p {
-    margin: 0;
-    font-size: 16px;
-    color: #333;
-  }
+.search-container {
+  width: 100%;
+  max-width: 600px;
  
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  text-align: left;
+  background: linear-gradient(135deg, #f9f9f9, #e3e3e3);
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+.search-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  box-sizing: border-box;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.search-button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-button:hover {
+  background: linear-gradient(135deg, #0056b3, #004080);
+  transform: scale(1.05);
+}
+
+
+.results-container {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+.card {
+  background: linear-gradient(135deg, #ffffff, #f1f1f1);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+
+
+.open-close-button {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.open-close-button:hover {
+  background: linear-gradient(135deg, #0056b3, #004080);
+  transform: scale(1.1);
+}
+
+
+/* Dark Mode */
+.dark-mode {
+  background: #121212;
+  color: #ffffff;
+}
+
+.dark-mode .search-container {
+  background: #1e1e1e;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .search-input {
+  background: #333;
+  color: white;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .search-button {
+  background: linear-gradient(135deg, #0056b3, #003366);
+}
+
+.dark-mode .search-button:hover {
+  background: linear-gradient(135deg, #003366, #002244);
+}
+
+.dark-mode .results-container {
+  background: #1e1e1e;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .card {
+  background: #2a2a2a;
+  color: white;
+}
+
+.dark-mode .open-button, .dark-mode .close-button {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+}
+
+.dark-mode .open-button:hover, .dark-mode .close-button:hover {
+  background: linear-gradient(135deg, #0056b3, #004080);
+}
+
+/* Dark mode toggle button */
+.dark-mode-button {
+  background: linear-gradient(135deg, #444, #222);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dark-mode-button:hover {
+  background: linear-gradient(135deg, #222, #000);
+  transform: scale(1.05);
+}

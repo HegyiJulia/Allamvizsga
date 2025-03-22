@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { searchDocuments, SearchResult } from "./api/search";
 import TopNavBar from './components/TopNavBar';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from './pages/About';
+import About from './pages/About';
 import Search from './pages/Search';
-import About from './pages/Home';
+import Home from './pages/Home';
 
 function App() {
 
