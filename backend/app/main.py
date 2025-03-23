@@ -1,11 +1,12 @@
 from fastapi import FastAPI
-from app.routers import files, search
+from app.routers import files, search, semantic_search
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 # Routers
 app.include_router(files.router, prefix="/files", tags=["Files"])
 app.include_router(search.router, prefix="/search", tags=["Search"])
+app.include_router(semantic_search.router, prefix="/semantic_search", tags=["Semantic_search"])
 
 @app.get("/")
 def root():
