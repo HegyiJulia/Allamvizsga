@@ -2,7 +2,7 @@ import os
 import fitz  # PyMuPDF
 from elasticsearch import Elasticsearch
 from app.config import ELASTICSEARCH_URL
-
+import re
 
 # Csatlakozás az Elasticsearch szerverhez
 def get_elasticsearch_client():
@@ -17,7 +17,7 @@ es = get_elasticsearch_client()
 
 #Index neve
 INDEX_NAME = "senatus_resolutions"
-
+INDEX_DECISIONS = "senatus_decisions"
 
 # Index létrehozása, ha nem létezik
 def create_index_if_not_exists():
@@ -44,13 +44,19 @@ def process_and_index_pdfs(pdf_directory: str):
                 content = ""
                 for page in doc:
                     content += page.get_text()
-
+                date = extract_date(content)
                 # Elasticsearch dokumentum létrehozása
                 doc_body = {
                     "filename": filename,
-                    "content": content
+                    "content": content,
+                    "date": date
                 }
+                
+                # Határozatok keresése és indexelése
                 res = es.index(index=INDEX_NAME, document=doc_body)
+                
+                process_and_index_decisions(content, filename, date)
+               
                 print(f"Indexelt dokumentum: {filename}, ID: {res['_id']}")
             except Exception as e:
                 print(f"Hiba történt a PDF feldolgozása során: {filename}, Hiba: {e}")
@@ -58,3 +64,25 @@ def process_and_index_pdfs(pdf_directory: str):
     print("Minden PDF dokumentum sikeresen feldolgozva és indexelve!")
 
 
+# Dátum kinyerése a szövegből
+def extract_date(text: str):
+    date_match = re.search(r"Ikt\. sz\. \d+/([\d]{4}\.\d{2}\.\d{2})", text)
+    return date_match.group(1) if date_match else "Ismeretlen dátum"
+
+# Határozatok kinyerése és indexelése
+def process_and_index_decisions(text: str, filename: str, date: str):
+    pattern = re.compile(r"(\d{3,4})\. határozat\s*(.*?)(?=\n\d{3,4}\. határozat|\Z)", re.DOTALL)
+    matches = pattern.findall(text)
+    
+    for match in matches:
+        decision_number = match[0]
+        decision_text = match[1].strip()
+        
+        doc_body = {
+            "decision_number": decision_number,
+            "content": decision_text,
+            "filename": filename,
+            "date": date
+        }
+        es.index(index=INDEX_DECISIONS, document=doc_body)
+        print(f"Határozat indexelve: {decision_number}")
