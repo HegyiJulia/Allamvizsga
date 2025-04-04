@@ -1,3 +1,5 @@
+from datetime import datetime
+from typing import Optional, List
 from elasticsearch import Elasticsearch
 from app.config import ELASTICSEARCH_URL
 
@@ -32,7 +34,7 @@ def extract_snippet(content: str, query: str, snippet_length: int = 300):
 
 
 def semantic_search_documents(query: str):
-    es = get_elasticsearch_client()
+    es = get_elasticsearch_client(["http://localhost:9200"])
 
     query_body = {
         "query": {
@@ -78,68 +80,74 @@ def semantic_search_documents(query: str):
 
     return results
 
-
-# Keresési függvény
-def search_documents(query: str, mode: str):
-    es = get_elasticsearch_client()
-
-    # Különböző keresési lekérdezések
-    if mode == "phrase":
-        query_body = {
-            "query": {
-                "match_phrase": {  # Pontos kifejezést keres
-                    "content": query
-                }
-            }
-        }
-    elif mode == "word":
-        query_body = {
-            "query": {
-                "match": {  # Szavas keresés
-                    "content": query
-                }
-            }
-        }
-    else:
-        raise ValueError("Érvénytelen keresési mód!")  # Hibakezelés
-
-    # Elasticsearch keresés
+def validate_date(date_str: str) -> Optional[str]:
     try:
-        response = es.search(
-            index="senatus_resolutions",
-            body={
-                **query_body,
-                "highlight": {
-                    "fields": {
-                        "content": {
-                            "fragment_size": 150,
-                            "number_of_fragments": 1
-                        }
-                    }
-                },
-                "_source": ["filename", "content"]
-            }
-        )
-    except Exception as e:
-        raise ValueError(f"Hiba az Elasticsearch keresés során: {e}")
+        # Ellenőrizzük, hogy a dátum formátuma helyes-e (yyyy.MM.dd)
+        datetime.strptime(date_str, "%Y.%m.%d")
+        return date_str
+    except ValueError:
+        return None
+# Keresési függvény
+
+def search_documents(query: str, mode: str, start_date: Optional[str] = None, end_date: Optional[str] = None) -> List[dict]:
+    # Létrehozzuk az Elasticsearch query-t
+    must_clauses = []
+
+    # Ha van keresési kifejezés
+    if query:
+        if mode == "phrase":
+            must_clauses.append({"match_phrase": {"content": query}})
+        else:
+            must_clauses.append({"match": {"content": query}})
+
+    if start_date:
+        valid_start_date = validate_date(start_date)
+        if not valid_start_date:
+            raise ValueError(f"Hibás kezdő dátum formátum: {start_date}. A helyes formátum: yyyy.MM.dd")
+        start_date = valid_start_date
     
+    if end_date:
+        valid_end_date = validate_date(end_date)
+        if not valid_end_date:
+            raise ValueError(f"Hibás végső dátum formátum: {end_date}. A helyes formátum: yyyy.MM.dd")
+        end_date = valid_end_date
+
+    # Dátum szűrés hozzáadása, ha megadjuk a dátumokat
+    if start_date and end_date:
+        must_clauses.append({
+            "range": {
+                "date": {
+                    "gte": start_date,
+                    "lte": end_date
+                }
+            }
+        })
+    
+    # Elasticsearch lekérdezés
+    search_query = {
+        "query": {
+            "bool": {
+                "must": must_clauses
+            }
+        },
+        "highlight": {
+            "fields": {
+                "content": {}
+            }
+        }
+    }
+
+    es = get_elasticsearch_client()
+    response = es.search(index="senatus_resolutions", body=search_query)
+
     results = []
     for hit in response["hits"]["hits"]:
-        filename = hit["_source"]["filename"]
-        content = hit["_source"]["content"]
-
-        
-        snippet = hit.get("highlight", {}).get("content", [])
-        if snippet:
-            snippet = " ... ".join(snippet)  
-        else:
-            snippet = extract_snippet(content, query)   
-
-
+        source = hit["_source"]
+        highlight = hit.get("highlight", {}).get("content", [source["content"][:300]])[0]
         results.append({
-            "filename": filename,
-            "snippet": snippet,
-            "content": content
+            "filename": source.get("filename"),
+            "snippet": highlight,
+            "content": source.get("content")
         })
 
     return results

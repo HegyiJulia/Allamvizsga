@@ -6,11 +6,31 @@ export interface SearchResult {
   content:string;
 }
 
-export const searchDocuments = async (query: string, mode:"word"|"phrase"): Promise<SearchResult[]> => {
+export const searchDocuments = async (
+  query: string,
+  mode: "word" | "phrase",
+  startDate?: string,
+  endDate?: string
+): Promise<SearchResult[]> => {
   try {
-    const response = await apiClient.post("/search", { query, mode });
+    const payload: any = {
+      query,
+      mode,
+    };
 
-    console.log(response.data);
+    const formatDate = (date: string) => {
+      return date.replace(/-/g, ".");
+    };
+
+    if (startDate && startDate.trim() !== "") {
+      payload.startDate = formatDate(startDate);
+    }
+
+    if (endDate && endDate.trim() !== "") {
+      payload.endDate = formatDate(endDate);
+    }
+
+    const response = await apiClient.post("/search/", payload);
     return response.data.results;
   } catch (error) {
     console.error("Hiba történt a keresés során:", error);

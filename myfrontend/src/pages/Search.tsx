@@ -11,6 +11,8 @@ const Search = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null); 
   const [searchMode, setSearchMode] = useState<"word" | "phrase">("word"); 
   const [darkMode, setDarkMode] = useState(false); 
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
 
   const handleSearch = async () => {
     setLoading(true);
@@ -18,7 +20,7 @@ const Search = () => {
     setSelectedFileContent(null); 
     setSelectedIndex(null); 
     try {
-      const data = await searchDocuments(query, searchMode);
+      const data = await searchDocuments(query, searchMode, startDate, endDate);
       setResults(data);
     } catch (err) {
       console.error(err);
@@ -49,7 +51,29 @@ const Search = () => {
       <button onClick={toggleDarkMode} className="dark-mode-button">
         {darkMode ? "Világos mód" : "Sötét mód"}
       </button>
-      
+      <div className="date-range-container">
+  <div className="date-labels">
+    <label htmlFor="startDate">Dátumtól:</label>
+    <label htmlFor="endDate">Dátumig:</label>
+  </div>
+      <div className="date-inputs">
+        <input
+          id="startDate"
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          className="date-picker"
+        />
+        <input
+          id="endDate"
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+          className="date-picker"
+        />
+      </div>
+  </div>
+
       <div className="search-mode-container">
         <label>
           <input
@@ -59,7 +83,7 @@ const Search = () => {
             checked={searchMode === "word"}
             onChange={() => setSearchMode("word")}
           />
-          Szavas keresés
+          Kulcsszavas keresés
         </label>
         <label>
           <input
@@ -75,7 +99,7 @@ const Search = () => {
 
       <input
         type="text"
-        placeholder="Írja be a keresett szavakat.."
+        placeholder="Írja be a keresett szavakat../Kifejezést"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="search-input"

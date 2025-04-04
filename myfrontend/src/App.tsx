@@ -14,6 +14,8 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchMode, setSearchMode] = useState<"word" | "phrase">("word");
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
 
   const handleSearch = async () => {
     setLoading(true);

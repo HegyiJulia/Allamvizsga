@@ -10,8 +10,11 @@ def search_endpoint(request: SearchRequest):
         if not request.query.strip():
             raise HTTPException(status_code=400, detail="A keresési lekérdezés nem lehet üres!")
 
+        # Validáljuk a módot (word/phrase)
         mode = request.mode if request.mode in ["word", "phrase"] else "word"
-        results = search_documents(request.query, mode)
+        
+        # A kereséshez hozzuk a dátum intervallumot is, ha van
+        results = search_documents(request.query, mode, request.startDate, request.endDate)
 
         return {"results": results}  
 
@@ -19,3 +22,4 @@ def search_endpoint(request: SearchRequest):
         raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Szerverhiba: {str(e)}")
+
