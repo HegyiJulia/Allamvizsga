@@ -1,14 +1,16 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import './TopNavBar.css';
+
 
 const TopNavBar = () => {
   return (
     <nav className="navigation-bar">
-      <div className="app-name">My App</div>
-      <div className="links-container">
-        <a href="/" className="link">Home</a>
-        <a href="/about" className="link">About</a>
-        <a href="/search" className="link">Search</a>
+      <div className="logo">🗂️ Szenátusi határozatok</div>
+      <div className="nav-links">
+        <Link to="/">Kezdőlap</Link>
+        <Link to="/search">Keresés</Link>
+        <Link to="/about">Rólunk</Link>
       </div>
     </nav>
   );

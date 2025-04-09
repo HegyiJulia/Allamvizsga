@@ -46,7 +46,9 @@ const Search = () => {
   return (
     
     <div className={`search-container ${darkMode ? 'dark-mode' : ''}`}>
-      <h2>Dokumentum kereső</h2>
+
+      <div className="left-site">
+        
 
       <button onClick={toggleDarkMode} className="dark-mode-button">
         {darkMode ? "Világos mód" : "Sötét mód"}
@@ -110,44 +112,44 @@ const Search = () => {
 
       {loading && <p>Betöltés...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
+    
+      </div>
+      <div className={selectedFileContent ? "results-split-view" : "results-container"}>
 
-      <div className="results-container">
-        {results.length > 0 ? (
-          <div className="results-list">
+      {results.length > 0 ? (
+  <>
+    <div className="results-list">
             {results.map((item, index) => (
               <div key={index} className="card">
-                {selectedIndex === index ? (
-                  <div>
-                  <h3 className="title">{item.filename}</h3>
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: selectedFileContent ? selectedFileContent.replace(/\n/g, "<br />") : "",
-                    }}
-                  />
-                  <button className="open-close-button" onClick={closeFullContent}>
-                    Vissza
-                  </button>
-                </div>
-                ) : (
-                  <div>
-                    <h3 className="title">{item.filename}</h3>
-                    <p
-                      className="snippet"
-                      dangerouslySetInnerHTML={{
-                        __html: item.snippet.replace(/<em>/g, "<strong>").replace(/<\/em>/g, "</strong>"),
-                      }}
-                    />
-                    <button className="open-close-button" onClick={() => showFullContent(item.content, index)}>
-                      Több
-                    </button>
-                  </div>
-                )}
+                <h3 className="title">{item.filename}</h3>
+                <p
+                  className="snippet"
+                  dangerouslySetInnerHTML={{
+                    __html: item.snippet.replace(/<em>/g, "<strong>").replace(/<\/em>/g, "</strong>"),
+                  }}
+                />
+                <button className="open-close-button" onClick={() => showFullContent(item.content, index)}>
+                  Több
+                </button>
               </div>
             ))}
           </div>
-        ) : (
-          !loading && <p>Nincs találat.</p>
-        )}
+
+          {selectedFileContent && (
+            <div className="full-content-panel">
+              <button className="open-close-button" onClick={closeFullContent}>Vissza</button>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: selectedFileContent.replace(/\n/g, "<br />"),
+                }}
+              />
+            </div>
+          )}
+        </>
+      ) : (
+        !loading && <p>Nincs találat.</p>
+      )}
+
       </div>
     </div>
   );
