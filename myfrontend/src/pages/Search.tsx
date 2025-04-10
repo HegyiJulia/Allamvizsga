@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { searchDocuments, SearchResult } from "../api/search";
 import './Search.css';
+import { DatePicker, Input, Segmented } from "antd";
+import 'antd/dist/reset.css';
 
 const Search = () => {
   const [query, setQuery] = useState("");
@@ -8,17 +10,22 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedFileContent, setSelectedFileContent] = useState<string | null>(null);
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null); 
-  const [searchMode, setSearchMode] = useState<"word" | "phrase">("word"); 
-  const [darkMode, setDarkMode] = useState(false); 
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [searchMode, setSearchMode] = useState<"word" | "phrase">("word");
+  const [darkMode, setDarkMode] = useState(false);
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
+  const [hasSearched, setHasSearched] = useState(false);
+
+  const { RangePicker } = DatePicker;
+  const { Search: AntSearch } = Input;
 
   const handleSearch = async () => {
     setLoading(true);
     setError(null);
-    setSelectedFileContent(null); 
-    setSelectedIndex(null); 
+    setSelectedFileContent(null);
+    setSelectedIndex(null);
+    setHasSearched(true);
     try {
       const data = await searchDocuments(query, searchMode, startDate, endDate);
       setResults(data);
@@ -39,122 +46,91 @@ const Search = () => {
     setSelectedIndex(null);
   };
 
-    const toggleDarkMode = () => {
+  const toggleDarkMode = () => {
     setDarkMode(!darkMode);
   };
 
   return (
-    
     <div className={`search-container ${darkMode ? 'dark-mode' : ''}`}>
 
       <div className="left-site">
-        
+        <div className="search-controls">
 
-      <button onClick={toggleDarkMode} className="dark-mode-button">
-        {darkMode ? "Világos mód" : "Sötét mód"}
-      </button>
-      <div className="date-range-container">
-  <div className="date-labels">
-    <label htmlFor="startDate">Dátumtól:</label>
-    <label htmlFor="endDate">Dátumig:</label>
-  </div>
-      <div className="date-inputs">
-        <input
-          id="startDate"
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          className="date-picker"
-        />
-        <input
-          id="endDate"
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          className="date-picker"
-        />
-      </div>
-  </div>
-
-      <div className="search-mode-container">
-        <label>
-          <input
-            type="radio"
-            name="searchMode"
-            value="word"
-            checked={searchMode === "word"}
-            onChange={() => setSearchMode("word")}
+          <Segmented
+            options={[
+              { label: 'Kulcsszavak', value: 'word' },
+              { label: 'Kifejezés', value: 'phrase' },
+            ]}
+            value={searchMode}
+            onChange={(val) => setSearchMode(val as 'word' | 'phrase')}
+            size="large"
           />
-          Kulcsszavas keresés
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="searchMode"
-            value="phrase"
-            checked={searchMode === "phrase"}
-            onChange={() => setSearchMode("phrase")}
+
+          <AntSearch
+            placeholder="Írja be a keresett szavakat../Kifejezést"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onSearch={handleSearch}
+            enterButton="Keresés"
+            allowClear
+            size="large"
           />
-          Kifejezés keresés
-        </label>
+
+          <RangePicker
+            style={{ width: '100%', borderRadius: 8 }}
+            format="YYYY-MM-DD"
+            allowClear
+            onChange={(dates, dateStrings) => {
+              setStartDate(dateStrings[0]);
+              setEndDate(dateStrings[1]);
+            }}
+          />
+
+        </div>
+
+        {loading && <p>Betöltés...</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
       </div>
 
-      <input
-        type="text"
-        placeholder="Írja be a keresett szavakat../Kifejezést"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="search-input"
-      />
-      <button onClick={handleSearch} className="search-button">
-        Keresés
-      </button>
-
-      {loading && <p>Betöltés...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-    
-      </div>
       <div className={selectedFileContent ? "results-split-view" : "results-container"}>
+        {results.length > 0 ? (
+          <>
+            <div className="results-list">
+              {results.map((item, index) => (
+                <div key={index} className="card">
+                  <h3 className="title">{item.filename}</h3>
+                  <p
+                    className="snippet"
+                    dangerouslySetInnerHTML={{
+                      __html: item.snippet.replace(/<em>/g, "<strong>").replace(/<\/em>/g, "</strong>"),
+                    }}
+                  />
+                  <button
+                    className="open-close-button"
+                    onClick={() => showFullContent(item.content, index)}
+                  >
+                    Több
+                  </button>
+                </div>
+              ))}
+            </div>
 
-      {results.length > 0 ? (
-  <>
-    <div className="results-list">
-            {results.map((item, index) => (
-              <div key={index} className="card">
-                <h3 className="title">{item.filename}</h3>
-                <p
-                  className="snippet"
+            {selectedFileContent && (
+              <div className="full-content-panel">
+                <div
                   dangerouslySetInnerHTML={{
-                    __html: item.snippet.replace(/<em>/g, "<strong>").replace(/<\/em>/g, "</strong>"),
+                    __html: selectedFileContent.replace(/\n/g, "<br />"),
                   }}
                 />
-                <button className="open-close-button" onClick={() => showFullContent(item.content, index)}>
-                  Több
-                </button>
               </div>
-            ))}
-          </div>
-
-          {selectedFileContent && (
-            <div className="full-content-panel">
-              <button className="open-close-button" onClick={closeFullContent}>Vissza</button>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: selectedFileContent.replace(/\n/g, "<br />"),
-                }}
-              />
-            </div>
-          )}
-        </>
-      ) : (
-        !loading && <p>Nincs találat.</p>
-      )}
-
+            )}
+          </>
+        ) : (
+          hasSearched && !loading && results.length === 0 && <p>Nincs találat.</p>
+        )}
       </div>
     </div>
   );
 };
 
 export default Search;
-
-

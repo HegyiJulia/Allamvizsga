@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Switch } from 'antd'; 
 import './TopNavBar.css';
-
 
 const TopNavBar = () => {
   return (
@@ -12,8 +12,10 @@ const TopNavBar = () => {
         <Link to="/search">Keresés</Link>
         <Link to="/about">Rólunk</Link>
       </div>
+  
     </nav>
   );
 };
 
 export default TopNavBar;
+

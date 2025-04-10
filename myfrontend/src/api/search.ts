@@ -1,5 +1,6 @@
 import { apiClient } from "./client";
 
+
 export interface SearchResult {
   filename: string;
   snippet: string;
