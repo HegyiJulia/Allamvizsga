@@ -14,7 +14,7 @@ def root():
 
 # CORS engedélyezése a frontend számára
 origins = [
-    "http://localhost:5173",  # Frontend alkalmazás helye
+    "*",  # Frontend alkalmazás helye
 ]
 
 app.add_middleware(

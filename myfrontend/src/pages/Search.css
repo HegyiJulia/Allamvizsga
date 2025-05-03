@@ -41,7 +41,6 @@
   margin-top: 20px;
   padding: 15px;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease-in-out;
 }
 
@@ -123,8 +122,7 @@
 
 .dark-mode .results-container {
   background: #1e1e1e;
-  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
-}
+ }
 
 .dark-mode .card {
   background: #2a2a2a;

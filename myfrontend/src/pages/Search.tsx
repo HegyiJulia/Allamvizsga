@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";  
 import { searchDocuments, SearchResult } from "../api/search";
 import './Search.css';
 import { DatePicker, Input, Segmented } from "antd";
@@ -10,11 +10,10 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedFileContent, setSelectedFileContent] = useState<string | null>(null);
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [searchMode, setSearchMode] = useState<"word" | "phrase">("word");
-  const [darkMode, setDarkMode] = useState(false);
-  const [startDate, setStartDate] = useState<string>("");
-  const [endDate, setEndDate] = useState<string>("");
+  const [darkMode] = useState(false);
+  const [startDate, setStartDate] = useState<string>(""); 
+  const [endDate, setEndDate] = useState<string>(""); 
   const [hasSearched, setHasSearched] = useState(false);
 
   const { RangePicker } = DatePicker;
@@ -24,7 +23,6 @@ const Search = () => {
     setLoading(true);
     setError(null);
     setSelectedFileContent(null);
-    setSelectedIndex(null);
     setHasSearched(true);
     try {
       const data = await searchDocuments(query, searchMode, startDate, endDate);
@@ -36,36 +34,20 @@ const Search = () => {
     setLoading(false);
   };
 
-  const showFullContent = (content: string, index: number) => {
+  const showFullContent = (content: string) => {
     setSelectedFileContent(content);
-    setSelectedIndex(index);
-  };
-
-  const closeFullContent = () => {
-    setSelectedFileContent(null);
-    setSelectedIndex(null);
-  };
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
   };
 
   return (
     <div className={`search-container ${darkMode ? 'dark-mode' : ''}`}>
-
       <div className="left-site">
         <div className="search-controls">
-
           <Segmented
-            options={[
-              { label: 'Kulcsszavak', value: 'word' },
-              { label: 'Kifejezés', value: 'phrase' },
-            ]}
+            options={[{ label: 'Kulcsszavak', value: 'word' }, { label: 'Kifejezés', value: 'phrase' }] }
             value={searchMode}
             onChange={(val) => setSearchMode(val as 'word' | 'phrase')}
             size="large"
           />
-
           <AntSearch
             placeholder="Írja be a keresett szavakat../Kifejezést"
             value={query}
@@ -75,17 +57,15 @@ const Search = () => {
             allowClear
             size="large"
           />
-
           <RangePicker
             style={{ width: '100%', borderRadius: 8 }}
             format="YYYY-MM-DD"
             allowClear
-            onChange={(dates, dateStrings) => {
-              setStartDate(dateStrings[0]);
+            onChange={(_, dateStrings) => {
+              setStartDate(dateStrings[0]);  
               setEndDate(dateStrings[1]);
             }}
           />
-
         </div>
 
         {loading && <p>Betöltés...</p>}
@@ -107,7 +87,7 @@ const Search = () => {
                   />
                   <button
                     className="open-close-button"
-                    onClick={() => showFullContent(item.content, index)}
+                    onClick={() => showFullContent(item.content)}
                   >
                     Több
                   </button>

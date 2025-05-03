@@ -1,6 +1,4 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import { Switch } from 'antd'; 
 import './TopNavBar.css';
 
 const TopNavBar = () => {

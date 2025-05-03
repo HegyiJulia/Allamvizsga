@@ -1,14 +1,15 @@
 import os
 import fitz  # PyMuPDF
 from elasticsearch import Elasticsearch
-from app.config import ELASTICSEARCH_URL
 import re
+ELASTICSEARCH_URL = "http://localhost:9200"
+
 
 # Csatlakozás az Elasticsearch szerverhez
 # Elasticsearch csatlakozás
 def get_elasticsearch_client():
     es_host = os.getenv("ELASTICSEARCH_HOST", "elasticsearch")  # Elasticsearch neve a docker-compose.yml-ben
-    es_url = f"http://{es_host}:9200"
+    es_url = ELASTICSEARCH_URL
     es = Elasticsearch([es_url])
     try:
         if not es.ping():
@@ -69,27 +70,3 @@ def process_and_index_pdfs(pdf_directory: str):
                 print(f"Hiba történt a PDF feldolgozása során: {filename}, Hiba: {e}")
     
     print("Minden PDF dokumentum sikeresen feldolgozva és indexelve!")
-
-
-# Dátum kinyerése a szövegből
-def extract_date(text: str):
-    date_match = re.search(r"Ikt\. sz\. \d+/([\d]{4}\.\d{2}\.\d{2})", text)
-    return date_match.group(1) if date_match else "Ismeretlen dátum"
-
-# Határozatok kinyerése és indexelése
-def process_and_index_decisions(text: str, filename: str, date: str):
-    pattern = re.compile(r"(\d{3,4})\. határozat\s*(.*?)(?=\n\d{3,4}\. határozat|\Z)", re.DOTALL)
-    matches = pattern.findall(text)
-    
-    for match in matches:
-        decision_number = match[0]
-        decision_text = match[1].strip()
-        
-        doc_body = {
-            "decision_number": decision_number,
-            "content": decision_text,
-            "filename": filename,
-            "date": date
-        }
-        es.index(index=INDEX_DECISIONS, document=doc_body)
-        print(f"Határozat indexelve: {decision_number}")

@@ -1,13 +1,9 @@
-import { useState } from 'react'
+
 import TopNavBar from './components/TopNavBar';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import About from './pages/About';
 import Search from './pages/Search';
 import Home from './pages/Home';
-
-
-
-
   
   function App() {
   
