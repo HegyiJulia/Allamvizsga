@@ -2,20 +2,27 @@ from datetime import datetime
 from typing import Optional, List
 from elasticsearch import Elasticsearch
 from app.config import ELASTICSEARCH_URL
+import requests
 import os
 # Csatlakozás az Elasticsearch szerverhez
 def get_elasticsearch_client():
     es_host = os.getenv("ELASTICSEARCH_HOST", "elasticsearch")  # Elasticsearch neve a docker-compose.yml-ben
     es_url = f"http://{es_host}:9200"
-    es = Elasticsearch([es_url])
-    print(f"Elasticsearch URL: {os.getenv('ELASTICSEARCH_HOST')}")  # Kiírja a konténerben
+    
+    # es_url = f"http://elasticsearch:9200"
     try:
-        if not es.ping():
-            raise ValueError("Elasticsearch nem elérhető!")
-    except Exception as e:
-        print(f"Elasticsearch hiba: {e}")
-        raise ValueError("Elasticsearch nem elérhető!")
-    return es
+        es = Elasticsearch([es_url])
+        # print(es.ping(), es.info())
+        response = requests.get(es_url, timeout=5)
+        if response.status_code == 200:
+            print(f"✅ OK: {es_url} elérhető.")
+            return es
+        else:
+            print(f"⚠️ Válaszkód: {response.status_code} a {es_url}-ről.")
+            return False
+    except requests.RequestException as e:
+        print(f"❌ Hiba történt: {e}")
+        return False
 
 
 def extract_snippet(content: str, query: str, snippet_length: int = 300):

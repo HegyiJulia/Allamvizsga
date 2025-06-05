@@ -1,3 +1,4 @@
+from fastapi.staticfiles import StaticFiles
 from fastapi import FastAPI
 from app.routers import files, search, semantic_search
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,3 +25,4 @@ app.add_middleware(
     allow_methods=["*"],  # Engedélyezett HTTP-módszerek
     allow_headers=["*"],  # Engedélyezett fejlécek
 )
+

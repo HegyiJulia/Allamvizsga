@@ -16,7 +16,7 @@ const Search = () => {
   const [endDate, setEndDate] = useState<string>(""); 
   const [hasSearched, setHasSearched] = useState(false);
 
-  const { RangePicker } = DatePicker;
+  const { RangePicker,  } = DatePicker;
   const { Search: AntSearch } = Input;
 
   const handleSearch = async () => {
