@@ -1,8 +1,17 @@
 from fastapi import APIRouter, HTTPException
 from app.services.elastic_handler import search_documents
+from app.services.semantic_search import search_semantic
 from app.models.search import SearchRequest, SearchResponse
+from app.models.search import SemanticSearchRequest, SemanticSearchResponse
 #from app.services.pdf_processor import  process_and_index_pdfs
 router = APIRouter()
+
+
+
+@router.post("/semantic-search", response_model=SemanticSearchResponse)
+def semantic_search(query: SemanticSearchRequest):
+    results = search_semantic(query.query, query.top_k)
+    return {"results": results}
 
 @router.post("/")
 def search_endpoint(request: SearchRequest):

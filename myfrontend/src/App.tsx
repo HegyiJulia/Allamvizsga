@@ -1,9 +1,11 @@
 
 import TopNavBar from './components/TopNavBar';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import About from './pages/About';
 import Search from './pages/Search';
 import Home from './pages/Home';
+import SemanticSearch from "./pages/SemanticSearch";
   
   function App() {
   
@@ -15,6 +17,7 @@ import Home from './pages/Home';
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
+              <Route path="/semantic-search" element={<SemanticSearch />} />
               <Route path="/search" element={<Search />} />
             </Routes>
           </div>

@@ -11,3 +11,15 @@ class SearchRequest(BaseModel):
 
 class SearchResponse(BaseModel):
     results: List[str]
+
+class SemanticSearchRequest(BaseModel):
+    query: str
+    top_k: int = 5
+
+class SearchResult(BaseModel):
+    id: str
+    content: str
+    score: float
+
+class SemanticSearchResponse(BaseModel):
+    results: List[SearchResult]

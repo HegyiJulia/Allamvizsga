@@ -8,6 +8,7 @@ const TopNavBar = () => {
       <div className="nav-links">
         <Link to="/">Kezdőlap</Link>
         <Link to="/search">Keresés</Link>
+        <Link to="/semantic-search">Kontextus</Link>
         <Link to="/about">Rólunk</Link>
       </div>
   
