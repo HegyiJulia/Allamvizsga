@@ -59,7 +59,8 @@ const Search = () => {
           />
           <RangePicker
             style={{ width: '100%', borderRadius: 8 }}
-            format="YYYY-MM-DD"
+             picker="month"
+            format="YYYY-MM"
             allowClear
             onChange={(_, dateStrings) => {
               setStartDate(dateStrings[0]);  

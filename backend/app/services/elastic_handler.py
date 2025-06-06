@@ -93,8 +93,8 @@ def semantic_search_documents(query: str):
 
 def validate_date(date_str: str) -> Optional[str]:
     try:
-        # Ellenőrizzük, hogy a dátum formátuma helyes-e (yyyy.MM.dd)
-        datetime.strptime(date_str, "%Y.%m.%d")
+        # Ellenőrizzük, hogy a dátum formátuma helyes-e (yyyy.MM)
+        datetime.strptime(date_str, "%Y.%m")
         return date_str
     except ValueError:
         return None
@@ -114,13 +114,13 @@ def search_documents(query: str, mode: str, start_date: Optional[str] = None, en
     if start_date:
         valid_start_date = validate_date(start_date)
         if not valid_start_date:
-            raise ValueError(f"Hibás kezdő dátum formátum: {start_date}. A helyes formátum: yyyy.MM.dd")
+            raise ValueError(f"Hibás kezdő dátum formátum: {start_date}. A helyes formátum: yyyy.MM")
         start_date = valid_start_date
     
     if end_date:
         valid_end_date = validate_date(end_date)
         if not valid_end_date:
-            raise ValueError(f"Hibás végső dátum formátum: {end_date}. A helyes formátum: yyyy.MM.dd")
+            raise ValueError(f"Hibás végső dátum formátum: {end_date}. A helyes formátum: yyyy.MM")
         end_date = valid_end_date
 
     # Dátum szűrés hozzáadása, ha megadjuk a dátumokat
