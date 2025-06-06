@@ -30,8 +30,16 @@ def get_pdf(filename: str):
     filepath = os.path.join(base_dir, "../../downloaded_files/pdf_files")
     filepath = os.path.join(filepath, filename)
     filepath = os.path.abspath(filepath)
+
     if os.path.exists(filepath):
-        return FileResponse(filepath, media_type="application/pdf", filename=filename)
+        response =  FileResponse(
+            filepath,
+            media_type="application/pdf", 
+            filename=filename)
+    
+        response.headers["Content-Disposition"] = f'inline; filename="{filename}"'
+        return response
+    
     else:
         raise HTTPException(status_code=404, detail="Fájl nem található")
 
