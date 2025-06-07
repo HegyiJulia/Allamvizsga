@@ -1,4 +1,4 @@
-// src/pages/SemanticSearch.tsx
+
 import { useState } from "react";
 import { semanticSearch, SemanticResult } from "../api/semantic";
 import { Input, Spin } from "antd";

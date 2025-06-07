@@ -1,9 +1,12 @@
-from datetime import datetime
-from typing import Optional, List
-from elasticsearch import Elasticsearch
-from app.config import ELASTICSEARCH_URL
-import requests
 import os
+from datetime import datetime
+from typing import List, Optional
+
+import requests
+from app.config import ELASTICSEARCH_URL
+from elasticsearch import Elasticsearch
+
+
 # Csatlakozás az Elasticsearch szerverhez
 def get_elasticsearch_client():
     es_host = os.getenv("ELASTICSEARCH_HOST", "elasticsearch")  # Elasticsearch neve a docker-compose.yml-ben

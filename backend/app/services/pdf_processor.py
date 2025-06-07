@@ -4,9 +4,12 @@ from elasticsearch import Elasticsearch
 from app.config import ELASTICSEARCH_URL
 import re
 import requests
+from sentence_transformers import SentenceTransformer, util
 #from PyPDF2 import PdfReader
 import json
 import datetime
+
+model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
 
 def normalize_date(date_str):
     try:
@@ -121,19 +124,24 @@ def extract_date(text: str):
 def process_and_index_decisions(text: str, filename: str, date: str):
     pattern = re.compile(r"(\d{3,4})\. határozat\s*(.*?)(?=\n\d{3,4}\. határozat|\Z)", re.DOTALL)
     matches = pattern.findall(text)
-    
+
     for match in matches:
         decision_number = match[0]
         decision_text = match[1].strip()
-        
+
+        # embedding kiszámítása
+        embedding = model.encode(decision_text).tolist()  # numpy array -> list kell az ES-nek
+
         doc_body = {
             "decision_number": decision_number,
             "content": decision_text,
             "filename": filename,
-            "date": date
+            "date": date,
+            "embedding": embedding
         }
         es.index(index=INDEX_DECISIONS, document=doc_body)
         print(f"Határozat indexelve: {decision_number}")
+
 
 #pdf-> json
 
