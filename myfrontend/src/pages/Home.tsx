@@ -52,7 +52,7 @@ const Home = () => {
           overflowY: "auto",
         }}
       >
-        <h3>PDF Files</h3>
+        <h3>Szenátui ülések határozatai</h3>
         <ul style={{ listStyle: "none", padding: 0 }}>
           {pdfs.length > 0 ? (
             pdfs.map((pdf) => (
@@ -62,14 +62,17 @@ const Home = () => {
                   padding: "0.5rem",
                   cursor: "pointer",
                   borderBottom: "1px solid #eee",
+                  backgroundColor: selectedPdfUrl === `${import.meta.env.VITE_API_URL}${encodeURI(pdf.url)}` ? "#e6f7ff" : "transparent",
+                  fontWeight: selectedPdfUrl === `${import.meta.env.VITE_API_URL}${encodeURI(pdf.url)}` ? "bold" : "normal",
                 }}
                 onClick={() => handleSelectPdf(pdf.url)}
               >
                 {pdf.filename}
               </li>
+
             ))
           ) : (
-            <li>No PDFs available</li>
+            <li>Nincs elérhető dokumentum</li>
           )}
         </ul>
       </div>
@@ -85,7 +88,7 @@ const Home = () => {
             
           />
         ) : (
-          <p>Valazs ki egy PDF-et</p>
+          <p>Válasz ki egy dokumentumot</p>
         )}
        
       </div>

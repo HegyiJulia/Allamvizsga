@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import './TopNavBar.css';
 
 const TopNavBar = () => {
@@ -6,14 +6,29 @@ const TopNavBar = () => {
     <nav className="navigation-bar">
       <div className="logo">🗂️ Szenátusi határozatok</div>
       <div className="nav-links">
-        <Link to="/">Kezdőlap</Link>
-        <Link to="/search">Keresés</Link>
-        <Link to="/semantic-search">Kontextus</Link>
+        <NavLink
+          to="/"
+          className={({ isActive }) => (isActive ? "active-link" : "")}
+        >
+          Kezdőlap
+        </NavLink>
+        <NavLink
+          to="/search"
+          className={({ isActive }) => (isActive ? "active-link" : "")}
+        >
+          Keresés
+        </NavLink>
+        <NavLink
+          to="/semantic-search"
+          className={({ isActive }) => (isActive ? "active-link" : "")}
+        >
+          Kontextus
+        </NavLink>
       </div>
-  
     </nav>
   );
 };
 
 export default TopNavBar;
+
 

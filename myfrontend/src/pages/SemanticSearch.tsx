@@ -28,7 +28,7 @@ const SemanticSearch = () => {
     <div className="search-container">
       <div className="search-controls">
         <AntSearch
-          placeholder="Add meg a keresett fogalmat (pl. klímastratégia)"
+          placeholder="Add meg a keresett fogalmakat (pl. Hogyan változik az ösztöndíj összege 2020 után?)"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onSearch={handleSearch}
