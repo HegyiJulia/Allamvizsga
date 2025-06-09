@@ -21,6 +21,9 @@ class SearchResult(BaseModel):
     content: str
     decision_number: str
     score: float
+    filename: str
+    date: str
+
 
 class SemanticSearchResponse(BaseModel):
     results: List[SearchResult]

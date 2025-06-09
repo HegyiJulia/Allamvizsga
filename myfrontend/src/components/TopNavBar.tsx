@@ -10,7 +10,7 @@ const TopNavBar = () => {
           to="/"
           className={({ isActive }) => (isActive ? "active-link" : "")}
         >
-          Kezdőlap
+          Böngészés
         </NavLink>
         <NavLink
           to="/search"
@@ -22,7 +22,7 @@ const TopNavBar = () => {
           to="/semantic-search"
           className={({ isActive }) => (isActive ? "active-link" : "")}
         >
-          Kontextus
+          Szemantikus keresés
         </NavLink>
       </div>
     </nav>

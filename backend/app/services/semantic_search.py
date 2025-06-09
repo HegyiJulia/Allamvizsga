@@ -34,8 +34,11 @@ def search_semantic(query: str, top_k: int = 5):
             "id": hit['_id'],
             "content": source['content'],
             "decision_number": source.get('decision_number', ''),
-            "score": score
+            "score": score,
+            "filename": source.get('filename', ''),
+            "date": source.get('date', '')
         })
+
 
 
     return results

@@ -52,7 +52,7 @@ const Home = () => {
           overflowY: "auto",
         }}
       >
-        <h3>Szenátui ülések határozatai</h3>
+        <h3>Szenátusi ülések határozatai</h3>
         <ul style={{ listStyle: "none", padding: 0 }}>
           {pdfs.length > 0 ? (
             pdfs.map((pdf) => (
@@ -88,7 +88,7 @@ const Home = () => {
             
           />
         ) : (
-          <p>Válasz ki egy dokumentumot</p>
+          <p>Válassz ki egy dokumentumot!</p>
         )}
        
       </div>

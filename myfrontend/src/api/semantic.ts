@@ -1,10 +1,12 @@
-// src/api/semantic.ts
 export interface SemanticResult {
   id: string;
   content: string;
   decision_number: string;
   score: number;
+  filename: string;
+  date: string;
 }
+
 
 export async function semanticSearch(query: string, top_k = 5): Promise<SemanticResult[]> {
   const response = await fetch("http://localhost:8000/search/semantic-search", {
