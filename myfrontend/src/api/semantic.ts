@@ -2,6 +2,7 @@
 export interface SemanticResult {
   id: string;
   content: string;
+  decision_number: string;
   score: number;
 }
 

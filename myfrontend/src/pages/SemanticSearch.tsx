@@ -43,6 +43,7 @@ const SemanticSearch = () => {
       <div className="results-container">
         {results.map((item) => (
           <div key={item.id} className="card">
+            <p><strong>{item.decision_number}. Határozat</strong></p>
             <p className="snippet">{item.content}</p>
             <p className="score">Hasonlóság: {(item.score * 100).toFixed(2)}%</p>
           </div>

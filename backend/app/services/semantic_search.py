@@ -19,7 +19,7 @@ def search_semantic(query: str, top_k: int = 5):
             "field": "embedding",
             "query_vector": query_embedding,
             "k": top_k,
-            "num_candidates": 100  # vagy 1000, ha sok adatod van
+            "num_candidates": 100  
         }
     }
 
@@ -29,11 +29,13 @@ def search_semantic(query: str, top_k: int = 5):
     results = []
     for hit in res['hits']['hits']:
         source = hit['_source']
-        score = hit['_score']  # Elasticsearch cosine similarity score
+        score = hit['_score']  
         results.append({
             "id": hit['_id'],
             "content": source['content'],
+            "decision_number": source.get('decision_number', ''),
             "score": score
         })
+
 
     return results

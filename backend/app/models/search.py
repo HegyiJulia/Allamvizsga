@@ -19,6 +19,7 @@ class SemanticSearchRequest(BaseModel):
 class SearchResult(BaseModel):
     id: str
     content: str
+    decision_number: str
     score: float
 
 class SemanticSearchResponse(BaseModel):
