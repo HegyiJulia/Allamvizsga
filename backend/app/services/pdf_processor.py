@@ -122,7 +122,7 @@ def extract_date(text: str):
 
 # Határozatok kinyerése és indexelése
 def process_and_index_decisions(text: str, filename: str, date: str):
-    pattern = re.compile(r"(\d{3,4})\. határozat\s*(.*?)(?=\n\d{3,4}\. határozat|\Z)", re.DOTALL)
+    pattern = re.compile(r"(\d{3,4})\.?\s*határozat\s*(.*?)(?=\n\d{3,4}\.?\s*határozat|\Z)", re.DOTALL | re.IGNORECASE)
     matches = pattern.findall(text)
 
     for match in matches:

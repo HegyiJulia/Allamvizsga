@@ -35,7 +35,19 @@ const Search = () => {
   };
 
   const showFullContent = (content: string) => {
-    setSelectedFileContent(content);
+    const highlightQuery = (text: string) => {
+      if (!query) return text;
+
+      const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // escape regex
+      const regex = searchMode === 'phrase'
+        ? new RegExp(escapedQuery, 'gi')
+        : new RegExp(`\\b(${escapedQuery.split(' ').join('|')})\\b`, 'gi');
+
+      return text.replace(regex, (match) => `<strong>${match}</strong>`);
+    };
+
+    setSelectedFileContent(highlightQuery(content));
+
   };
 
   return (

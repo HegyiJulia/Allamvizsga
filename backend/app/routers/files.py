@@ -24,7 +24,7 @@ def process_pdfs_endpoint():
         print (e)
         raise HTTPException(status_code=500, detail=f"Hiba történt: {e}")
     
-@router.get("/get_pdf/{filename}")
+@router.get("/pdfs/{filename}")
 def get_pdf(filename: str):
     base_dir = os.path.dirname(os.path.abspath(__file__))  # <== elmegy az app/routers/ szintről a backend/ szintre
     filepath = os.path.join(base_dir, "../../downloaded_files/pdf_files")
@@ -57,7 +57,7 @@ def list_pdfs():
         files = [
             {
                 "filename": f,
-                "url": f"/files/get_pdf/{f}"
+                "url": f"/files/pdfs/{f}"
             }
             for f in os.listdir(directory)
             if f.lower().endswith(".pdf")
@@ -67,7 +67,3 @@ def list_pdfs():
         raise HTTPException(status_code=500, detail=f"Hiba a fájlok listázása közben: {e}")
 
 
-
-@router.get("/_test")
-def test():
-    return {"message": "Router működik"}

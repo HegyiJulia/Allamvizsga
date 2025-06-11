@@ -211,6 +211,10 @@
 }
 
 
+strong {
+  background-color: rgb(145, 191, 255);
+  font-weight: bold;
+}
 
 .results-split-view {
   display: flex;
