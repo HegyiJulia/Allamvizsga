@@ -20,10 +20,17 @@ const Search = () => {
   const { Search: AntSearch } = Input;
 
   const handleSearch = async () => {
+    if (query.trim() === "") {
+      setError("Kérlek, adj meg egy keresési kifejezést!");
+      setResults([]); 
+      return;
+    }
+
     setLoading(true);
     setError(null);
     setSelectedFileContent(null);
     setHasSearched(true);
+
     try {
       const data = await searchDocuments(query, searchMode, startDate, endDate);
       setResults(data);
@@ -31,8 +38,11 @@ const Search = () => {
       console.error(err);
       setError("Hiba történt a keresés során.");
     }
+
     setLoading(false);
   };
+
+
 
   const showFullContent = (content: string) => {
     const highlightQuery = (text: string) => {

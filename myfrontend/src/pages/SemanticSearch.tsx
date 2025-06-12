@@ -13,6 +13,11 @@ const SemanticSearch = () => {
   const [error, setError] = useState<string | null>(null);
 
   const handleSearch = async () => {
+    if (query.trim() === "") {
+      setError("Kérlek, adj meg egy keresési kifejezést!");
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
@@ -24,6 +29,7 @@ const SemanticSearch = () => {
     setLoading(false);
   };
 
+
   return (
     <div className="search-container">
       <div className="search-controls">
@@ -34,6 +40,7 @@ const SemanticSearch = () => {
           onSearch={handleSearch}
           enterButton="Keresés"
           size="large"
+          
         />
       </div>
 
