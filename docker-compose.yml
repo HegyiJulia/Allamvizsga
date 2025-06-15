@@ -12,8 +12,7 @@ services:
     depends_on:
       - elasticsearch
     entrypoint: ["/wait-for-it.sh", "elasticsearch:9200", "--", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
-    networks:
-      - avizsga_network
+    
 
   frontend:
     build:
@@ -28,8 +27,7 @@ services:
       - VITE_API_URL=http://localhost:8000
     depends_on:
       - backend
-    networks:
-      - avizsga_network
+   
 
 
 
@@ -40,9 +38,6 @@ services:
       - xpack.security.enabled=false
     ports:
       - "9200:9200"
-    networks:
-      - avizsga_network
+  
 
-networks:
-  avizsga_network:
-    driver: bridge 
+
